@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Providers\AuthServiceProvider;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use App\Models\User;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\ProjectRequest as StoreRequest;
 use App\Http\Requests\ProjectRequest as UpdateRequest;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class ProjectCrudController
@@ -15,6 +18,13 @@ use App\Http\Requests\ProjectRequest as UpdateRequest;
  */
 class ProjectCrudController extends CrudController
 {
+    const LINE = 'line';
+    const TOP = 'top';
+    const BEGINNING = 'beginning';
+    const END = 'end';
+    const LENGTHPANEL = 10;
+
+    private $user_id;
     public function setup()
     {
         /*
@@ -25,6 +35,7 @@ class ProjectCrudController extends CrudController
         $this->crud->setModel('App\Models\Project');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/project');
         $this->crud->setEntityNameStrings('project', 'projects');
+        $this->user_id = Auth::user()->id;
 
         /*
         |--------------------------------------------------------------------------
@@ -32,16 +43,78 @@ class ProjectCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
 
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        $this->crud->setFromDb();
+
+        // ------ CRUD FIELDS
+        $this->crud->addField(
+            [
+                'name' => 'name',
+                'label' => "Name",
+                'type' => 'text',
+            ]
+        );
+
+        $this->crud->addField(
+            [
+                'name' => 'city',
+                'label' => "City",
+                'type' => 'text',
+            ]
+        );
+
+        // ------ CRUD COLUMNS
+        $this->crud->addColumn(
+            [
+                // 1-n relationship
+                'label' => "User", // Table column heading
+                'type' => "select",
+                'name' => 'user_id', // the column that contains the ID of that connected entity;
+                'entity' => 'user', // the method that defines the relationship in your Model
+                'attribute' => "first_name", // foreign key attribute that is shown to user
+                'model' => "App\Models\User", // foreign key model
+                'priority' => 1,
+            ]
+        );
+        $this->crud->addColumn(
+            [
+                'name' => 'name',
+                'label' => "Name",
+                'type' => 'text',
+            ]
+        );
+        $this->crud->addColumn(
+            [
+                'name' => 'city',
+                'label' => "City",
+                'type' => 'text',
+            ]
+        );
+
+        // ------ ADVANCED QUERIES
+        $this->crud->addClause('where', 'user_id', '=', $this->user_id);
 
         // add asterisk for fields that are required in ProjectRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+
+        // ------ CRUD BUTTONS
+        $this->crud->addButtonFromView(self::LINE, 'propertiesButton', 'properties_button', self::END);
     }
 
     public function store(StoreRequest $request)
     {
+        $user_id = $request->user()->id;
+
+        $user = User::find($user_id );
+
+        if($user) {
+            $request->merge(['user_id' => $user->id ]);
+        }
+        else{
+            return abort(404);
+        }
+
+
+
         // your additional operations before save here
         $redirect_location = parent::storeCrud($request);
         // your additional operations after save here
