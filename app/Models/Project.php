@@ -16,10 +16,10 @@ class Project extends Model
     */
 
     protected $table = 'projects';
-    // protected $primaryKey = 'id';
+     protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = [];
+    protected $fillable = ['user_id', 'name', 'city'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -34,6 +34,15 @@ class Project extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function properties()
+    {
+        return $this->hasMany('App\Models\Property');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 
     /*
     |--------------------------------------------------------------------------

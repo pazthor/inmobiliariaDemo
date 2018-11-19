@@ -16,10 +16,10 @@ class Property extends Model
     */
 
     protected $table = 'properties';
-    // protected $primaryKey = 'id';
+     protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = [];
+    protected $fillable = ['sku','description', 'project_id','price', 'type', 'photo', 'status'];
     // protected $hidden = [];
     // protected $dates = [];
 
