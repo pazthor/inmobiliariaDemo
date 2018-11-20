@@ -34,7 +34,10 @@ class Property extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
+    public function project()
+    {
+        return $this->belongsTo('App\Project');
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -46,7 +49,41 @@ class Property extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
+    public function setPhotoAttribute($value)
+    {
 
+        $attribute_name = "photo";
+        $disk = "photoProperty";
+        $destination_path = "public/properties";
+
+        // if the image was erased
+        if ($value==null) {
+            // delete the image from disk
+            \Storage::disk($disk)->delete($this->{$attribute_name});
+
+            // set null in the database column
+            $this->attributes[$attribute_name] = null;
+        }
+
+        // if a base64 was sent, store it in the db
+        if (starts_with($value, 'data:image'))
+        {
+            // 0. Make the image
+            $image = \Image::make($value);
+            // 1. Generate a filename.
+            $filename = md5($value.time()).'.jpg';
+            // 2. Store the image on disk.
+            \Storage::disk($disk)->put($filename, $image->stream());
+            // 3. Save the path to the database
+            $this->attributes[$attribute_name] = $filename;
+        }
+    }
+
+    public function getPhotoAttribute($photo)
+    {
+        $image = $photo ?: 'avatar.jpg';
+        return url('properties/' . $image);
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
