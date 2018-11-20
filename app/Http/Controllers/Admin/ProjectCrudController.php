@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Providers\AuthServiceProvider;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Models\User;
+use App\Models\Project;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\ProjectRequest as StoreRequest;
@@ -64,18 +65,6 @@ class ProjectCrudController extends CrudController
         // ------ CRUD COLUMNS
         $this->crud->addColumn(
             [
-                // 1-n relationship
-                'label' => "User", // Table column heading
-                'type' => "select",
-                'name' => 'user_id', // the column that contains the ID of that connected entity;
-                'entity' => 'user', // the method that defines the relationship in your Model
-                'attribute' => "first_name", // foreign key attribute that is shown to user
-                'model' => "App\Models\User", // foreign key model
-                'priority' => 1,
-            ]
-        );
-        $this->crud->addColumn(
-            [
                 'name' => 'name',
                 'label' => "Name",
                 'type' => 'text',
@@ -86,6 +75,30 @@ class ProjectCrudController extends CrudController
                 'name' => 'city',
                 'label' => "City",
                 'type' => 'text',
+            ]
+        );
+
+        $this->crud->addColumn(
+            [
+                'label' => "Sold",
+                'type' => "soldTotalProperties",
+                'priority' => 2,
+            ]
+        );
+
+        $this->crud->addColumn(
+            [
+                'label' => "Separated",
+                'type' => "separatedTotalProperties",
+                'priority' => 2,
+            ]
+        );
+
+        $this->crud->addColumn(
+            [
+                'label' => "Available",
+                'type' => "availableTotalProperties",
+                'priority' => 2,
             ]
         );
 
@@ -103,7 +116,6 @@ class ProjectCrudController extends CrudController
     public function store(StoreRequest $request)
     {
         $user_id = $request->user()->id;
-
         $user = User::find($user_id );
 
         if($user) {
