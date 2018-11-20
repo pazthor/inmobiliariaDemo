@@ -38,7 +38,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-3">
-            @include('backpack::auth.account.sidemenu')
+            {{--@include('backpack::vendor.backpack.base.auth.account.sidemenu')--}}
         </div>
         <div class="col-md-6">
 
@@ -68,8 +68,16 @@
 
                         <div class="form-group">
                             @php
-                                $label = trans('backpack::base.name');
-                                $field = 'name';
+                                $label = 'First Name';
+                                $field = 'first_name';
+                            @endphp
+                            <label class="required">{{ $label }}</label>
+                            <input required class="form-control" type="text" name="{{ $field }}" value="{{ old($field) ? old($field) : $user->$field }}">
+                        </div>
+                        <div class="form-group">
+                            @php
+                                $label = 'Last Name';
+                                $field = 'last_name';
                             @endphp
                             <label class="required">{{ $label }} khhaaa</label>
                             <input required class="form-control" type="text" name="{{ $field }}" value="{{ old($field) ? old($field) : $user->$field }}">
