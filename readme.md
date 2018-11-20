@@ -1,7 +1,7 @@
 ## Demo using Laravel with Backpack framework.
 
 
-## Instalation
+## Installation
 
 - run composer:
 ```
