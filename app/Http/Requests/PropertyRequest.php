@@ -27,6 +27,8 @@ class PropertyRequest extends FormRequest
     {
         return [
             // 'name' => 'required|min:5|max:255'
+            'sku' => 'required|min:5|max:255|unique',
+            'price' => 'required'
         ];
     }
 
