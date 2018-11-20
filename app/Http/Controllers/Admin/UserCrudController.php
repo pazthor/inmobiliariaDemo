@@ -32,12 +32,38 @@ class UserCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
 
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        $this->crud->setFromDb();
+        $this->crud->addField(
+            [
+                'name' => 'first_name',
+                'label' => "First Name",
+                'type' => 'text',
+            ]
+        );
+
+        $this->crud->addField(
+            [
+                'name' => 'last_name',
+                'label' => "Last Name",
+                'type' => 'text',
+            ]
+        );
+
+        $this->crud->addField(
+            [
+                'name' => 'username',
+                'label' => "Email",
+                'type' => 'text',
+            ]
+        );
+
 
         // add asterisk for fields that are required in UserRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+    }
+
+    public function index()
+    {
     }
 
     public function store(StoreRequest $request)
