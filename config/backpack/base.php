@@ -15,14 +15,14 @@ return [
     'project_name' => 'Inmobiliaria',
 
     // Menu logos
-    'logo_lg'   => '<b>Back</b>pack',
-    'logo_mini' => '<b>B</b>p',
+    'logo_lg'   => '<b>Inmobiliaria</b>MaMe',
+    'logo_mini' => '<b>M</b>M',
 
     // Developer or company name. Shown in footer.
     'developer_name' => '@pazthor',
 
     // Developer website. Link in footer.
-    'developer_link' => 'pazthor.github.io',
+    'developer_link' => 'https://pazthor.github.io',
 
     // Show powered by Laravel Backpack in the footer?
     'show_powered_by' => false,
